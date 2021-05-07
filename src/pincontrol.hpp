@@ -15,11 +15,11 @@ public:
   pin() = default;
 
   void set();
-  void set(const uint8_t &pin, const uint8_t &mode);
   void write(const uint8_t &value);
   uint8_t read(void);
 
 protected:
+  void set(const uint8_t &pin, const uint8_t &mode);
   uint8_t oldSREG { };
   uint8_t bit { }, port { };
   volatile uint8_t *reg { }, *out { };
@@ -33,7 +33,7 @@ protected:
   void setPort(uint8_t value) { port = value; }
 
 private:
-  uint8_t _mode;
+  uint8_t _mode = 0;
 };
 
 class inputPin : public pin
