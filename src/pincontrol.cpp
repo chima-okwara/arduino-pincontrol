@@ -1,22 +1,23 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "pincontrol.hpp"
+#include "pincontrolDefinitions.hpp"
 
-pin::pin(const uint8_t &pin, const uint8_t &mode)
+pin::pin(const uint8_t &pin, const uint8_t &mode):_mode(mode)
 {
-  set(pin, mode);
+  set(pin, _mode);
 }
 
 void pin::set(const uint8_t &pin, const uint8_t &mode)
 {
-  port = digitalPinToPort(pin);
+  port = getPort(pin);
   exists = EXIST(port);
   if (exists)
   {
-    reg = portModeRegister(port);
-    out = portOutputRegister(port);
+    reg = getPortReg(port);
+    out = getOutReg(port);
 
-    bit = digitalPinToBitMask(pin);
+    bit = getBit(pin);
     _mode = mode;
     set();
   }
@@ -51,7 +52,7 @@ void pin::set()
 uint8_t pin::read()
 {
   if(exists)
-    return((*portInputRegister(port) & bit) ? HIGH:LOW);
+    return((*getInReg(port) & bit) ? HIGH:LOW);
   else
     return NOPORT;
 }

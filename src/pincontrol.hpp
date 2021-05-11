@@ -1,22 +1,20 @@
+#ifndef PINCONTROL
+#define PINCONTROL
+
 #include <Arduino.h>
 #include <stdint.h>
-
-#define NOEXIST(x) (((x)==NOT_A_PIN)?1:0)
-#define EXIST(x) (((x)==NOT_A_PIN)?0:1)
-#define ON HIGH
-#define OFF LOW
-#define NOPORT -1
-#define DELAY(x) (_delay_ms(x))
+#include "pincontrolDefinitions.hpp"
 
 class pin
 {
 public:
-  pin(const uint8_t &ArduinoPin, const uint8_t &Mode = INPUT);
   pin() = default;
+  explicit pin(const uint8_t &ArduinoPin, const uint8_t &Mode = INPUT);
 
   void set();
   void write(const uint8_t &value);
   uint8_t read(void);
+  
 
 protected:
   void set(const uint8_t &pin, const uint8_t &mode);
@@ -30,27 +28,30 @@ protected:
   volatile uint8_t *getReg() const { return (reg); }
   volatile uint8_t *getOut() const { return (out); }
 
-  void setPort(uint8_t value) { port = value; }
 
 private:
   uint8_t _mode = 0;
 };
 
-class inputPin : public pin
+class inputPin : public virtual pin
 {
 public:
+  using pin::pin;
   inputPin() = default;
-  inputPin(const uint8_t &ArduinoPin) { set(ArduinoPin, INPUT); }
+  inputPin(const uint8_t &ArduinoPin):pin(ArduinoPin, INPUT) {  }
 
-  void pullUpRes(const uint8_t &value) { write(value); }
+  void pullUp(const uint8_t &value) { write(value); }
 };
 
 
-class outputPin : public pin
+class outputPin : public virtual pin
 {
 public:
-  outputPin(const uint8_t & ArduinoPin) { set(ArduinoPin, OUTPUT); }
+  using pin::pin;
   outputPin() = default;
+  outputPin(const uint8_t & ArduinoPin):pin(ArduinoPin, OUTPUT) {  }
 
   void toggle(void);
 };
+
+#endif
