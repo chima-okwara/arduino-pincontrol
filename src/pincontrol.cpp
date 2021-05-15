@@ -10,14 +10,14 @@ pin::pin(const uint8_t &pin, const uint8_t &mode):_mode(mode)
 
 void pin::set(const uint8_t &pin, const uint8_t &mode)
 {
-  port = getPort(pin);
+  port = digitalPinToPort(pin);
   exists = EXIST(port);
   if (exists)
   {
-    reg = getPortReg(port);
-    out = getOutReg(port);
+    reg = portModeRegister(port);
+    out = portOutputRegister(port);
 
-    bit = getBit(pin);
+    bit = digitalPinToBitMask(pin);
     _mode = mode;
     set();
   }
@@ -52,7 +52,7 @@ void pin::set()
 uint8_t pin::read()
 {
   if(exists)
-    return((*getInReg(port) & bit) ? HIGH:LOW);
+    return((*portInputRegister(port) & bit) ? HIGH:LOW);
   else
     return NOPORT;
 }

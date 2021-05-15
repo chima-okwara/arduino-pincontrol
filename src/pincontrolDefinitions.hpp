@@ -9,11 +9,5 @@
 #define NOPORT -1
 #define DELAY(x) (_delay_ms(x))
 
-#define getPort(x) (digitalPinToPort(x))
-#define getBit(x) (digitalPinToBitMask(x))
-#define getPortReg(x) (portModeRegister(x))
-#define getOutReg(x) (portOutputRegister(x))
-#define getInReg(x) (portInputRegister(x))
-
 
 #endif
