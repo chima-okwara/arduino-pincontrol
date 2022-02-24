@@ -8,11 +8,11 @@ pin::pin(const uint8_t &pin, const uint8_t &mode):_mode(mode)
   set(pin, _mode);
 }
 
-void pin::set(const uint8_t &pin, const uint8_t &mode)
+bool pin::set(const uint8_t &pin, const uint8_t &mode)
 {
   port = digitalPinToPort(pin);
-  exists = EXIST(port);
-  if (exists)
+  *exists = EXIST(port);
+  if (*exists)
   {
     reg = portModeRegister(port);
     out = portOutputRegister(port);
@@ -20,14 +20,16 @@ void pin::set(const uint8_t &pin, const uint8_t &mode)
     bit = digitalPinToBitMask(pin);
     _mode = mode;
     set();
+    return 1;
   }
 
-  else;
+  else
+    return 0;
 }
 
-void pin::set()
+bool pin::set()
 {
-  if(exists)
+  if(*exists)
   {
     if(_mode == INPUT)
     {
@@ -44,22 +46,24 @@ void pin::set()
       *reg |= bit;
       SREG = oldSREG;
     }
+    return 1;
   }
 
-  else;
+  else
+    return 0;
 }
 
 uint8_t pin::read()
 {
-  if(exists)
+  if(*exists)
     return((*portInputRegister(port) & bit) ? HIGH:LOW);
   else
     return NOPORT;
 }
 
-void pin::write(const uint8_t &value)
+bool pin::write(const uint8_t &value)
 {
-  if (exists)
+  if (*exists)
   {
     switch (value)
     {
@@ -83,14 +87,23 @@ void pin::write(const uint8_t &value)
         break;
       }
     }
+    return 1;
   }
 
-  else;
+  else
+    return 0;
 }
 
-void outputPin::toggle()
+bool outputPin::toggle()
 {
-  oldSREG = SREG;
-  *out ^= bit;
-  SREG = oldSREG;
+  if (_mode == OUTPUT)
+  {
+    oldSREG = SREG;
+    *out ^= bit;
+    SREG = oldSREG;
+    return (1);
+  }
+
+  else
+    return (0);
 }

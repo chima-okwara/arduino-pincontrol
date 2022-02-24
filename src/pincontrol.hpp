@@ -11,25 +11,22 @@ public:
   pin() = default;
   explicit pin(const uint8_t &ArduinoPin, const uint8_t &Mode = INPUT);
 
-  void set();
-  void write(const uint8_t &value);
+  bool set();
+  bool write(const uint8_t &value);
   uint8_t read(void);
-  
+
 
 protected:
-  void set(const uint8_t &pin, const uint8_t &mode);
+  bool set(const uint8_t &pin, const uint8_t &mode);
   uint8_t oldSREG { };
   uint8_t bit { }, port { };
   volatile uint8_t *reg { }, *out { };
-  bool exists;
+  bool *exists { };
 
   uint8_t getPort() const { return (port); }
   uint8_t getBit() const { return (bit); }
   volatile uint8_t *getReg() const { return (reg); }
   volatile uint8_t *getOut() const { return (out); }
-
-
-private:
   uint8_t _mode = 0;
 };
 
@@ -40,7 +37,7 @@ public:
   inputPin() = default;
   inputPin(const uint8_t &ArduinoPin):pin(ArduinoPin, INPUT) {  }
 
-  void pullUp(const uint8_t &value) { write(value); }
+  bool pullUp(const uint8_t &value) { return(write(value)); }
 };
 
 
@@ -51,7 +48,7 @@ public:
   outputPin() = default;
   outputPin(const uint8_t & ArduinoPin):pin(ArduinoPin, OUTPUT) {  }
 
-  void toggle(void);
+  bool toggle(void);
 };
 
 #endif
