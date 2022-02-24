@@ -4,7 +4,7 @@ outputPin led(13);
 
 void setup()
 {
-    led.set();
+
 }
 
 void loop()
