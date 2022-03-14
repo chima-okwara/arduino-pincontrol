@@ -21,10 +21,10 @@ protected:
   uint8_t oldSREG { };
   uint8_t bit { }, port { };
   volatile uint8_t *reg { }, *out { };
-  bool *exists { };
+  bool exists { };
 
-  uint8_t getPort() const { return (port); }
-  uint8_t getBit() const { return (bit); }
+  uint8_t *getPort() const { return (port); }
+  uint8_t *getBit() const { return (bit); }
   volatile uint8_t *getReg() const { return (reg); }
   volatile uint8_t *getOut() const { return (out); }
   uint8_t _mode = 0;

@@ -11,8 +11,8 @@ pin::pin(const uint8_t &pin, const uint8_t &mode):_mode(mode)
 bool pin::set(const uint8_t &pin, const uint8_t &mode)
 {
   port = digitalPinToPort(pin);
-  *exists = EXIST(port);
-  if (*exists)
+  exists = EXIST(port);
+  if (exists)
   {
     reg = portModeRegister(port);
     out = portOutputRegister(port);
@@ -29,7 +29,7 @@ bool pin::set(const uint8_t &pin, const uint8_t &mode)
 
 bool pin::set()
 {
-  if(*exists)
+  if(exists)
   {
     if(_mode == INPUT)
     {
@@ -55,7 +55,7 @@ bool pin::set()
 
 uint8_t pin::read()
 {
-  if(*exists)
+  if(exists)
     return((*portInputRegister(port) & bit) ? HIGH:LOW);
   else
     return NOPORT;
@@ -63,7 +63,7 @@ uint8_t pin::read()
 
 bool pin::write(const uint8_t &value)
 {
-  if (*exists)
+  if (exists)
   {
     switch (value)
     {
