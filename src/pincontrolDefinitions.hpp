@@ -7,7 +7,10 @@
 #define ON HIGH
 #define OFF LOW
 #define NOPORT -1
-#define DELAY(x) (_delay_ms(x))
+#define DELAY(x) (wait(x))
+
+#define analog_reference  DEFAULT
+#define analogReference(x) (analog_reference = x)
 
 
 #endif
